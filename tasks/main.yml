@@ -1,0 +1,39 @@
+# vim: set ft=ansible
+---
+
+- name: install wallabag config
+  template:
+    src: configs/wallabag.j2
+    dest: "/etc/container_environment/wallabag"
+
+- name: install wallabag redis service
+  template:
+    src: units/wallabag-redis.service.j2
+    dest: "/etc/systemd/system/{{ wallabag.redis_container }}.service"
+
+- name: install wallabag service
+  template:
+    src: units/{{ item }}.j2
+    dest: "/etc/systemd/system/{{ item }}"
+  with_items:
+    - wallabag.service
+    - wallabag-importer.service
+
+- name: reload systemd
+  command: systemctl daemon-reload    
+
+- name: start wallabag redis
+  service:
+    name: "{{ wallabag.redis_container }}.service"
+    state: started
+    enabled: yes
+
+- name: start wallabag
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - wallabag.service
+    - wallabag-importer.service
+

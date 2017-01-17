@@ -1,0 +1,26 @@
+[Unit]
+Description=Containerized Wallabe pocket importer
+After=docker.service
+Requires=docker.service
+After={{ wallabag.db_container }}.service
+Requires={{ wallabag.db_container }}.service
+After={{ wallabag.redis_container }}.service
+Requires={{ wallabag.redis_container }}.service
+After=wallabag.service
+Requires=wallabag.service
+
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill %p
+ExecStartPre=-/usr/bin/docker rm %p
+ExecStart=/usr/bin/docker run --name %p \
+				--workdir /var/www/wallabag/ \
+				--env-file /etc/container_environment/wallabag \
+				--link {{ wallabag.db_container }}:db \
+				--link {{ wallabag.redis_container }}:redis \
+				{{ wallabag.image }} import pocket
+ExecStop=/usr/bin/docker stop %p
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+POSTGRES_PASSWORD={{ postgres_container_password }}
+POSTGRES_USER=postgres
+SYMFONY__ENV__DATABASE_DRIVER=pdo_pgsql
+SYMFONY__ENV__DATABASE_HOST=db
+SYMFONY__ENV__DATABASE_PORT=5432
+SYMFONY__ENV__DATABASE_NAME={{ wallabag.db_name }}
+SYMFONY__ENV__DATABASE_USER={{ wallabag.db_user }}
+SYMFONY__ENV__DATABASE_PASSWORD={{ wallabag.db_password }}
+SYMFONY__ENV__MAILER_HOST={{ wallabag.email_host }}
+SYMFONY__ENV__MAILER_USER={{ wallabag.email_user }}
+SYMFONY__ENV__MAILER_PASSWORD={{ wallabag.email_password }}
+SYMFONY__ENV__FROM_EMAIL={{ wallabag.email_address }}
+SYMFONY__ENV__SECRET={{ wallabag.secret }}
+SYMFONY__ENV__FOSUSER_REGISTRATION=false

@@ -1,0 +1,24 @@
+[Unit]
+Description=Containerized Wallabe
+After=docker.service
+Requires=docker.service
+After={{ wallabag.db_container }}.service
+Requires={{ wallabag.db_container }}.service
+After={{ wallabag.redis_container }}.service
+Requires={{ wallabag.redis_container }}.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/container_environment/%p
+ExecStartPre=-/usr/bin/docker kill %p
+ExecStartPre=-/usr/bin/docker rm %p
+ExecStartPre=-/usr/bin/docker pull {{ wallabag.image }}
+ExecStart=/usr/bin/docker run --name %p \
+				--env-file /etc/container_environment/wallabag \
+				--link {{ wallabag.db_container }}:db \
+				--link {{ wallabag.redis_container }}:redis \
+				{{ wallabag.image }}
+ExecStop=/usr/bin/docker stop %p
+
+[Install]
+RequiredBy=multi-user.target
