@@ -1,0 +1,9 @@
+# vim: set ft=ansible
+---
+wallabe_db_password: xxx
+wallabe_email_password: cde
+wallabe_secret: abc
+
+wallabe_email_user: user
+wallabe_email_host: host
+wallabe_email_address: a@b.de
